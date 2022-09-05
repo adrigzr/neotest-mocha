@@ -1,0 +1,188 @@
+{
+  "stats": {
+    "suites": 4,
+    "tests": 8,
+    "passes": 4,
+    "pending": 2,
+    "failures": 2,
+    "start": "2022-09-04T09:50:39.567Z",
+    "end": "2022-09-04T09:50:39.575Z",
+    "duration": 8
+  },
+  "tests": [
+    {
+      "title": "should pass",
+      "fullTitle": "describe suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should fail",
+      "fullTitle": "describe suite should fail",
+      "file": "./test/specs/basic.test.js",
+      "duration": 5,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(false)\n\n    at Context.<anonymous> (./test/specs/basic.test.js:13:12)\n    at callFn (./node_modules/mocha/lib/runnable.js:366:21)\n    at Test.Runnable.run (./node_modules/mocha/lib/runnable.js:354:5)\n    at Runner.runTest (./node_modules/mocha/lib/runner.js:666:10)\n    at ./node_modules/mocha/lib/runner.js:789:12\n    at next (./node_modules/mocha/lib/runner.js:581:14)\n    at ./node_modules/mocha/lib/runner.js:591:7\n    at next (./node_modules/mocha/lib/runner.js:474:14)\n    at Immediate._onImmediate (./node_modules/mocha/lib/runner.js:559:5)\n    at processImmediate (node:internal/timers:466:21)",
+        "message": "The expression evaluated to a falsy value:\n\n  assert.ok(false)\n",
+        "generatedMessage": true,
+        "name": "AssertionError",
+        "code": "ERR_ASSERTION",
+        "actual": "false",
+        "expected": "true",
+        "operator": "=="
+      }
+    },
+    {
+      "title": "should skip",
+      "fullTitle": "describe suite should skip",
+      "file": "./test/specs/basic.test.js",
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "should pass",
+      "fullTitle": "describe suite nested suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should pass",
+      "fullTitle": "context suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should fail",
+      "fullTitle": "context suite should fail",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(false)\n\n    at Context.<anonymous> (./test/specs/basic.test.js:36:12)\n    at callFn (./node_modules/mocha/lib/runnable.js:366:21)\n    at Test.Runnable.run (./node_modules/mocha/lib/runnable.js:354:5)\n    at Runner.runTest (./node_modules/mocha/lib/runner.js:666:10)\n    at ./node_modules/mocha/lib/runner.js:789:12\n    at next (./node_modules/mocha/lib/runner.js:581:14)\n    at ./node_modules/mocha/lib/runner.js:591:7\n    at next (./node_modules/mocha/lib/runner.js:474:14)\n    at Immediate._onImmediate (./node_modules/mocha/lib/runner.js:559:5)\n    at processImmediate (node:internal/timers:466:21)",
+        "message": "The expression evaluated to a falsy value:\n\n  assert.ok(false)\n",
+        "generatedMessage": true,
+        "name": "AssertionError",
+        "code": "ERR_ASSERTION",
+        "actual": "false",
+        "expected": "true",
+        "operator": "=="
+      }
+    },
+    {
+      "title": "should skip",
+      "fullTitle": "context suite should skip",
+      "file": "./test/specs/basic.test.js",
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "should pass",
+      "fullTitle": "context suite nested suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    }
+  ],
+  "pending": [
+    {
+      "title": "should skip",
+      "fullTitle": "describe suite should skip",
+      "file": "./test/specs/basic.test.js",
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "should skip",
+      "fullTitle": "context suite should skip",
+      "file": "./test/specs/basic.test.js",
+      "currentRetry": 0,
+      "err": {}
+    }
+  ],
+  "failures": [
+    {
+      "title": "should fail",
+      "fullTitle": "describe suite should fail",
+      "file": "./test/specs/basic.test.js",
+      "duration": 5,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(false)\n\n    at Context.<anonymous> (./test/specs/basic.test.js:13:12)\n    at callFn (./node_modules/mocha/lib/runnable.js:366:21)\n    at Test.Runnable.run (./node_modules/mocha/lib/runnable.js:354:5)\n    at Runner.runTest (./node_modules/mocha/lib/runner.js:666:10)\n    at ./node_modules/mocha/lib/runner.js:789:12\n    at next (./node_modules/mocha/lib/runner.js:581:14)\n    at ./node_modules/mocha/lib/runner.js:591:7\n    at next (./node_modules/mocha/lib/runner.js:474:14)\n    at Immediate._onImmediate (./node_modules/mocha/lib/runner.js:559:5)\n    at processImmediate (node:internal/timers:466:21)",
+        "message": "The expression evaluated to a falsy value:\n\n  assert.ok(false)\n",
+        "generatedMessage": true,
+        "name": "AssertionError",
+        "code": "ERR_ASSERTION",
+        "actual": "false",
+        "expected": "true",
+        "operator": "=="
+      }
+    },
+    {
+      "title": "should fail",
+      "fullTitle": "context suite should fail",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(false)\n\n    at Context.<anonymous> (./test/specs/basic.test.js:36:12)\n    at callFn (./node_modules/mocha/lib/runnable.js:366:21)\n    at Test.Runnable.run (./node_modules/mocha/lib/runnable.js:354:5)\n    at Runner.runTest (./node_modules/mocha/lib/runner.js:666:10)\n    at ./node_modules/mocha/lib/runner.js:789:12\n    at next (./node_modules/mocha/lib/runner.js:581:14)\n    at ./node_modules/mocha/lib/runner.js:591:7\n    at next (./node_modules/mocha/lib/runner.js:474:14)\n    at Immediate._onImmediate (./node_modules/mocha/lib/runner.js:559:5)\n    at processImmediate (node:internal/timers:466:21)",
+        "message": "The expression evaluated to a falsy value:\n\n  assert.ok(false)\n",
+        "generatedMessage": true,
+        "name": "AssertionError",
+        "code": "ERR_ASSERTION",
+        "actual": "false",
+        "expected": "true",
+        "operator": "=="
+      }
+    }
+  ],
+  "passes": [
+    {
+      "title": "should pass",
+      "fullTitle": "describe suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should pass",
+      "fullTitle": "describe suite nested suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should pass",
+      "fullTitle": "context suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should pass",
+      "fullTitle": "context suite nested suite should pass",
+      "file": "./test/specs/basic.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    }
+  ]
+}
