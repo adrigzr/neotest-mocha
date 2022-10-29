@@ -339,4 +339,26 @@ function M.parsed_json_to_results(data, tree, consoleOut)
   return tests
 end
 
+function M.create_test_file_extensions_matcher(intermediate_extensions, end_extensions)
+  return function(file_path)
+    if file_path == nil then
+      return false
+    end
+
+    if string.match(file_path, "test") then
+      return true
+    end
+
+    for _, x in ipairs(intermediate_extensions) do
+      for _, ext in ipairs(end_extensions) do
+        if string.match(file_path, x .. "%." .. ext .. "$") then
+          return true
+        end
+      end
+    end
+
+    return false
+  end
+end
+
 return M
