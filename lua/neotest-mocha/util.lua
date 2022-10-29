@@ -339,6 +339,9 @@ function M.parsed_json_to_results(data, tree, consoleOut)
   return tests
 end
 
+---@param intermediate_extensions Array
+---@param end_extensions Array
+---@return function
 function M.create_test_file_extensions_matcher(intermediate_extensions, end_extensions)
   return function(file_path)
     if file_path == nil then
