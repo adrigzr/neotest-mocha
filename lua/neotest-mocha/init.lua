@@ -7,6 +7,7 @@ local util = require "neotest-mocha.util"
 ---@field command? string|fun(path:string): string
 ---@field env? table<string, string>|fun(): table<string, string>
 ---@field cwd? string|fun(): string
+---@field is_test_file? fun(path:string): boolean
 
 ---@type fun(path:string):string
 local get_mocha_command = util.get_mocha_command
@@ -30,24 +31,18 @@ Adapter.root = lib.files.match_root_pattern "package.json"
 ---@async
 ---@param file_path string
 ---@return boolean
+local default_is_test_file = util.create_test_file_extensions_matcher(
+  { "spec", "test" },
+  { "js", "mjs", "cjs", "jsx", "coffee", "ts", "tsx" }
+)
+
+local is_test_file = default_is_test_file
+
+---@async
+---@param file_path string
+---@return boolean
 function Adapter.is_test_file(file_path)
-  if file_path == nil then
-    return false
-  end
-
-  if string.match(file_path, "test") then
-    return true
-  end
-
-  for _, x in ipairs { "spec", "test" } do
-    for _, ext in ipairs { "js", "mjs", "cjs", "jsx", "coffee", "ts", "tsx" } do
-      if string.match(file_path, x .. "%." .. ext .. "$") then
-        return true
-      end
-    end
-  end
-
-  return false
+  return is_test_file(file_path)
 end
 
 ---Given a file path, parse all the tests within it.
@@ -165,6 +160,8 @@ end
 setmetatable(Adapter, {
   ---@param opts neotest.MochaOptions
   __call = function(_, opts)
+    is_test_file = opts.is_test_file or is_test_file
+
     if is_callable(opts.command) then
       get_mocha_command = opts.command
     elseif opts.command then

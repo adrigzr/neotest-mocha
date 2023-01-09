@@ -5,6 +5,7 @@ local MockTree = require "test.helpers.mock_tree"
 local plugin = require "neotest-mocha" {
   mochaCommand = "mocha",
 }
+local util = require "neotest-mocha.util"
 
 describe("is_test_file", function()
   local supported_extensions = { "js", "mjs", "cjs", "jsx", "coffee", "ts", "tsx" }
@@ -23,6 +24,26 @@ describe("is_test_file", function()
 
   it("does not match non-test files", function()
     assert.False(plugin.is_test_file "./src/index.js")
+  end)
+
+  it("matches mocha test files with configurable test patterns", function()
+    local intermediate_extensions = { "spec", "test", "lollipop" }
+    local is_test_file = util.create_test_file_extensions_matcher(
+      intermediate_extensions,
+      supported_extensions
+    )
+
+    -- by folder name.
+    for _, extension in ipairs(supported_extensions) do
+      assert.True(is_test_file("./test/basic." .. extension))
+    end
+
+    -- by file name.
+    for _, extension1 in ipairs(intermediate_extensions) do
+      for _, extension2 in ipairs(supported_extensions) do
+        assert.True(is_test_file("./src/basic." .. extension1 .. "." .. extension2))
+      end
+    end
   end)
 end)
 
