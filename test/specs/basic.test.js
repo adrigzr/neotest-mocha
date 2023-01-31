@@ -8,7 +8,7 @@ describe("describe suite", () => {
     assert.ok(true);
   });
 
-  it("should fail", () => {
+  it("should fail", function () {
     console.log("it should fail");
     assert.ok(false);
   });
@@ -17,7 +17,7 @@ describe("describe suite", () => {
     // noop
   });
 
-  describe("nested suite", () => {
+  describe("nested suite", function() {
     it("should pass", () => {
       assert.ok(true);
     });
@@ -41,7 +41,7 @@ context("context suite", () => {
   });
 
   context("nested suite", () => {
-    specify("should pass", () => {
+    specify("should pass", async function() {
       assert.ok(true);
     });
   })

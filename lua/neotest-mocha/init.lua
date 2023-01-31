@@ -55,28 +55,28 @@ function Adapter.discover_positions(file_path)
     ; Matches: `describe('context')`
     ((call_expression
       function: (identifier) @func_name (#any-of? @func_name "describe" "context")
-      arguments: (arguments (string (string_fragment) @namespace.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @namespace.name) [(function) (arrow_function)])
     )) @namespace.definition
     ; Matches: `describe.only('context')`
     ((call_expression
       function: (member_expression
         object: (identifier) @func_name (#any-of? @func_name "describe" "context")
       )
-      arguments: (arguments (string (string_fragment) @namespace.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @namespace.name) [(function) (arrow_function)])
     )) @namespace.definition
 
     ; -- Tests --
     ; Matches: `it('test') / specify('test')`
     ((call_expression
       function: (identifier) @func_name (#any-of? @func_name "it" "specify")
-      arguments: (arguments (string (string_fragment) @test.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @test.name) [(function) (arrow_function)])
     )) @test.definition
     ; Matches: `it.only('test') / specify.only('test')`
     ((call_expression
       function: (member_expression
         object: (identifier) @func_name (#any-of? @func_name "it" "specify")
       )
-      arguments: (arguments (string (string_fragment) @test.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @test.name) [(function) (arrow_function)])
     )) @test.definition
   ]]
 
