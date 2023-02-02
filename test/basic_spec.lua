@@ -28,10 +28,7 @@ describe("is_test_file", function()
 
   it("matches mocha test files with configurable test patterns", function()
     local intermediate_extensions = { "spec", "test", "lollipop" }
-    local is_test_file = util.create_test_file_extensions_matcher(
-      intermediate_extensions,
-      supported_extensions
-    )
+    local is_test_file = util.create_test_file_extensions_matcher(intermediate_extensions, supported_extensions)
 
     -- by folder name.
     for _, extension in ipairs(supported_extensions) do
