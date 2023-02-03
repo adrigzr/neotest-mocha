@@ -45,6 +45,16 @@ function Adapter.is_test_file(file_path)
   return is_test_file(file_path)
 end
 
+---Filter directories when searching for test files
+---@async
+---@param name string Name of directory
+---@param rel_path string Path to directory, relative to root
+---@param root string Root directory of project
+---@return boolean
+function Adapter.filter_dir(name)
+  return name ~= "node_modules"
+end
+
 ---Given a file path, parse all the tests within it.
 ---@async
 ---@param file_path string Absolute file path
@@ -55,28 +65,28 @@ function Adapter.discover_positions(file_path)
     ; Matches: `describe('context')`
     ((call_expression
       function: (identifier) @func_name (#any-of? @func_name "describe" "context")
-      arguments: (arguments (string (string_fragment) @namespace.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @namespace.name) (_))
     )) @namespace.definition
     ; Matches: `describe.only('context')`
     ((call_expression
       function: (member_expression
         object: (identifier) @func_name (#any-of? @func_name "describe" "context")
       )
-      arguments: (arguments (string (string_fragment) @namespace.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @namespace.name) (_))
     )) @namespace.definition
 
     ; -- Tests --
     ; Matches: `it('test') / specify('test')`
     ((call_expression
       function: (identifier) @func_name (#any-of? @func_name "it" "specify")
-      arguments: (arguments (string (string_fragment) @test.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @test.name) (_))
     )) @test.definition
     ; Matches: `it.only('test') / specify.only('test')`
     ((call_expression
       function: (member_expression
         object: (identifier) @func_name (#any-of? @func_name "it" "specify")
       )
-      arguments: (arguments (string (string_fragment) @test.name) (arrow_function))
+      arguments: (arguments (string (string_fragment) @test.name) (_))
     )) @test.definition
   ]]
 

@@ -24,6 +24,27 @@ describe("describe suite", () => {
   })
 });
 
+describe("function suite", function() {
+  it("should pass", function() {
+    console.log("it should pass");
+    assert.ok(true);
+  });
+
+  it("should fail", function() {
+    console.log("it should fail");
+    assert.ok(false);
+  });
+
+  it.skip("should skip", function() {
+    // noop
+  });
+
+  describe("nested suite", function() {
+    it("should pass", function() {
+      assert.ok(true);
+    });
+  })
+});
 
 context("context suite", () => {
   specify("should pass", () => {
