@@ -1,6 +1,7 @@
 local vim = vim
 local validate = vim.validate
 local uv = vim.loop
+local lib = require "neotest.lib"
 
 local M = {}
 
@@ -362,6 +363,36 @@ function M.create_test_file_extensions_matcher(intermediate_extensions, end_exte
 
     return false
   end
+end
+
+---@param path string
+---@param packageName string
+---@return boolean
+function M.has_package_dependency(path, packageName)
+  if not lib.files.exists(path .. "/package.json") then
+    return false
+  end
+
+  local packageJsonContent = lib.files.read(path .. "/package.json")
+  local parsedPackageJson = vim.json.decode(packageJsonContent)
+
+  if parsedPackageJson["dependencies"] then
+    for key, _ in pairs(parsedPackageJson["dependencies"]) do
+      if key == packageName then
+        return true
+      end
+    end
+  end
+
+  if parsedPackageJson["devDependencies"] then
+    for key, _ in pairs(parsedPackageJson["devDependencies"]) do
+      if key == packageName then
+        return true
+      end
+    end
+  end
+
+  return false
 end
 
 return M
