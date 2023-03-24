@@ -3,7 +3,7 @@ return {
     id = "./test/specs/basic.test.js",
     name = "basic.test.js",
     path = "./test/specs/basic.test.js",
-    range = { 0, 0, 69, 0 },
+    range = { 0, 0, 80, 0 },
     type = "file",
   },
   {
@@ -165,6 +165,33 @@ return {
           range = { 64, 4, 66, 6 },
           type = "test",
         },
+      },
+    },
+  },
+  {
+    {
+      id = "./test/specs/basic.test.js::backtick suite",
+      name = "backtick suite",
+      path = "./test/specs/basic.test.js",
+      range = { 70, 0, 79, 2 },
+      type = "namespace",
+    },
+    {
+      {
+        id = "./test/specs/basic.test.js::backtick suite::`backticks text`",
+        name = "`backticks text`",
+        path = "./test/specs/basic.test.js",
+        range = { 71, 2, 73, 4 },
+        type = "test",
+      },
+    },
+    {
+      {
+        id = "./test/specs/basic.test.js::backtick suite::`backticks text with variable: ${variable}`",
+        name = "`backticks text with variable: ${variable}`",
+        path = "./test/specs/basic.test.js",
+        range = { 76, 2, 78, 4 },
+        type = "test",
       },
     },
   },

@@ -67,3 +67,14 @@ context("context suite", () => {
     });
   })
 });
+
+describe("backtick suite", () => {
+  it(`backticks text`, () => {
+    assert.ok(true)
+  });
+
+  const variable = 'some value'
+  it(`backticks text with variable: ${variable}`, () => {
+    assert.ok(true)
+  })
+})
