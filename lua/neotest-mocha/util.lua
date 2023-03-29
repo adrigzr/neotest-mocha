@@ -320,8 +320,8 @@ function M.parsed_json_to_results(data, tree, consoleOut)
       local errorLine, errorColumn = M.find_error_position(test.file, test.err.stack)
 
       table.insert(errors, {
-        line = (errorLine or testNode.range[0]) - 1,
-        column = (errorColumn or testNode.range[1]) - 1,
+        line = errorLine and errorLine - 1 or testNode.range[1],
+        column = errorColumn and errorColumn - 1 or testNode.range[2],
         message = msg,
       })
 
