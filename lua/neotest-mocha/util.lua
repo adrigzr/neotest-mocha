@@ -348,10 +348,6 @@ function M.create_test_file_extensions_matcher(intermediate_extensions, end_exte
       return false
     end
 
-    if string.match(file_path, "test") then
-      return true
-    end
-
     for _, iext in ipairs(intermediate_extensions) do
       for _, eext in ipairs(end_extensions) do
         if string.match(file_path, iext .. "%." .. eext .. "$") then
