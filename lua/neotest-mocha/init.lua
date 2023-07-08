@@ -26,7 +26,15 @@ local Adapter = { name = "neotest-mocha" }
 ---@async
 ---@param dir string @Directory to treat as cwd
 ---@return string | nil @Absolute root dir of test suite
-Adapter.root = lib.files.match_root_pattern "package.json"
+Adapter.root = function(dir)
+  local rootPath = util.find_package_json_ancestor(dir)
+
+  if not rootPath or not util.has_package_dependency(rootPath, "mocha") then
+    return nil
+  end
+
+  return rootPath
+end
 
 ---@async
 ---@param file_path string
