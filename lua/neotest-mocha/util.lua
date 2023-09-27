@@ -377,11 +377,13 @@ end
 ---@param packageName string
 ---@return boolean
 function M.has_package_dependency(path, packageName)
-  if not lib.files.exists(path .. "/package.json") then
+  local fullPath = path .. "/package.json"
+
+  if not lib.files.exists(fullPath) then
     return false
   end
 
-  local packageJsonContent = lib.files.read(path .. "/package.json")
+  local packageJsonContent = lib.files.read(fullPath)
   local parsedPackageJson = vim.json.decode(packageJsonContent)
 
   if not parsedPackageJson then
