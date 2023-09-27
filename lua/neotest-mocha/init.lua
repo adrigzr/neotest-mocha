@@ -28,9 +28,6 @@ local Adapter = { name = "neotest-mocha" }
 ---@return string | nil @Absolute root dir of test suite
 Adapter.root = lib.files.match_root_pattern "package.json"
 
----@async
----@param file_path string
----@return boolean
 local default_is_test_file = util.create_test_file_extensions_matcher(
   { "spec", "test" },
   { "js", "mjs", "cjs", "jsx", "coffee", "ts", "tsx" }
@@ -56,13 +53,13 @@ function Adapter.filter_dir(name)
 end
 
 ---@param s string
----@param boolean
+---@return boolean
 local function isTemplateLiteral(s)
   return string.sub(s, 1, 1) == "`"
 end
 
 ---@param s string
----@param string
+---@return string
 local function getStringFromTemplateLiteral(s)
   local matched = string.match(s, "^`(.*)`$")
   if not matched then
