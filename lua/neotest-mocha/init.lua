@@ -39,7 +39,17 @@ local is_test_file = default_is_test_file
 ---@param file_path string
 ---@return boolean
 function Adapter.is_test_file(file_path)
-  return is_test_file(file_path)
+  local rootPath = util.find_package_json_ancestor(file_path)
+
+  if not rootPath then
+    return false
+  end
+
+  -- This is a test file if it matches the supported extensions and a parent directory
+  -- contains a package.json file with mocha installed. The latter is necessary to
+  -- support monorepos where there are multiple parent directories with a package.json
+  -- and the current file's position in the monorepo has to be taken into account as well
+  return is_test_file(file_path) and util.has_package_dependency(rootPath, "mocha")
 end
 
 ---Filter directories when searching for test files
