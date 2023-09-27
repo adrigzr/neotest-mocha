@@ -360,4 +360,43 @@ function M.create_test_file_extensions_matcher(intermediate_extensions, end_exte
   end
 end
 
+---@param dependencies table<string, string>?
+---@param packageName string
+---@return boolean
+local function _has_package_dependency(dependencies, packageName)
+  for key, _ in pairs(dependencies or {}) do
+    if key == packageName then
+      return true
+    end
+  end
+
+  return false
+end
+
+---@param path string
+---@param packageName string
+---@return boolean
+function M.has_package_dependency(path, packageName)
+  if not lib.files.exists(path .. "/package.json") then
+    return false
+  end
+
+  local packageJsonContent = lib.files.read(path .. "/package.json")
+  local parsedPackageJson = vim.json.decode(packageJsonContent)
+
+  if not parsedPackageJson then
+    return false
+  end
+
+  if _has_package_dependency(parsedPackageJson["dependencies"], packageName) then
+    return true
+  end
+
+  if _has_package_dependency(parsedPackageJson["devDependencies"], packageName) then
+    return true
+  end
+
+  return false
+end
+
 return M
