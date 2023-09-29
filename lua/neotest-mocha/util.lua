@@ -383,7 +383,13 @@ function M.has_package_dependency(path, packageName)
     return false
   end
 
-  local packageJsonContent = lib.files.read(fullPath)
+  local ok, packageJsonContent = pcall(lib.files.read, fullPath)
+
+  if not ok then
+    print("cannot read package.json")
+    return false
+  end
+
   local parsedPackageJson = vim.json.decode(packageJsonContent)
 
   if not parsedPackageJson then
