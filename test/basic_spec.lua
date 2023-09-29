@@ -1,4 +1,4 @@
-local async = require "plenary.async.tests"
+local async = require "nio".tests
 local neotest_async = require "neotest.async"
 local basic_test_positions = require "test.fixtures.basic_test_positions"
 local MockTree = require "test.helpers.mock_tree"
@@ -6,17 +6,24 @@ local plugin = require "neotest-mocha" {
   mochaCommand = "mocha",
 }
 local util = require "neotest-mocha.util"
+local stub = require "luassert.stub"
 
 describe("is_test_file", function()
   local supported_extensions = { "js", "mjs", "cjs", "jsx", "coffee", "ts", "tsx" }
+  local find_package_json_ancestor_stub
+  local has_package_dependency_stub
+
+  before_each(function()
+    find_package_json_ancestor_stub = stub(util, "find_package_json_ancestor").returns("./root/")
+    has_package_dependency_stub = stub(util, "has_package_dependency").returns(true)
+  end)
+
+  after_each(function()
+    find_package_json_ancestor_stub:revert()
+    has_package_dependency_stub:revert()
+  end)
 
   it("matches mocha test files", function()
-    -- by folder name.
-    for _, extension in ipairs(supported_extensions) do
-      assert.True(plugin.is_test_file("./test/basic." .. extension))
-    end
-
-    -- by file name.
     for _, extension in ipairs(supported_extensions) do
       assert.True(plugin.is_test_file("./src/basic.test." .. extension))
     end
@@ -26,16 +33,16 @@ describe("is_test_file", function()
     assert.False(plugin.is_test_file "./src/index.js")
   end)
 
+  it("does not mark a file as a test if mocha is not installed", function()
+    has_package_dependency_stub.returns(false)
+
+    assert.False(plugin.is_test_file "./src/basic.test.js")
+  end)
+
   it("matches mocha test files with configurable test patterns", function()
     local intermediate_extensions = { "spec", "test", "lollipop" }
     local is_test_file = util.create_test_file_extensions_matcher(intermediate_extensions, supported_extensions)
 
-    -- by folder name.
-    for _, extension in ipairs(supported_extensions) do
-      assert.True(is_test_file("./test/basic." .. extension))
-    end
-
-    -- by file name.
     for _, extension1 in ipairs(intermediate_extensions) do
       for _, extension2 in ipairs(supported_extensions) do
         assert.True(is_test_file("./src/basic." .. extension1 .. "." .. extension2))
