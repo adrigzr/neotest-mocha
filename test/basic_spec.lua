@@ -1,4 +1,4 @@
-local async = require "nio".tests
+local async = require("nio").tests
 local neotest_async = require "neotest.async"
 local basic_test_positions = require "test.fixtures.basic_test_positions"
 local MockTree = require "test.helpers.mock_tree"
@@ -14,7 +14,7 @@ describe("is_test_file", function()
   local has_package_dependency_stub
 
   before_each(function()
-    find_package_json_ancestor_stub = stub(util, "find_package_json_ancestor").returns("./root/")
+    find_package_json_ancestor_stub = stub(util, "find_package_json_ancestor").returns "./root/"
     has_package_dependency_stub = stub(util, "has_package_dependency").returns(true)
   end)
 

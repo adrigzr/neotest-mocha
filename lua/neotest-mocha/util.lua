@@ -387,7 +387,7 @@ function M.has_package_dependency(path, packageName)
   local ok, packageJsonContent = pcall(lib.files.read, fullPath)
 
   if not ok then
-    print("cannot read package.json")
+    print "cannot read package.json"
     return false
   end
 
