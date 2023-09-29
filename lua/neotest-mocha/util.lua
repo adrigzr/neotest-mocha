@@ -1,6 +1,7 @@
 local vim = vim
 local validate = vim.validate
 local uv = vim.loop
+local lib = require "neotest.lib"
 
 local M = {}
 
