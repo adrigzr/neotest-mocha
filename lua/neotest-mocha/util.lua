@@ -1,6 +1,7 @@
 local vim = vim
 local validate = vim.validate
 local uv = vim.loop
+local lib = require "neotest.lib"
 
 local M = {}
 
@@ -339,9 +340,9 @@ function M.parsed_json_to_results(data, tree, consoleOut)
   return tests
 end
 
----@param intermediate_extensions Array
----@param end_extensions Array
----@return function
+---@param intermediate_extensions string[]
+---@param end_extensions string[]
+---@return fun(file_path: string): boolean
 function M.create_test_file_extensions_matcher(intermediate_extensions, end_extensions)
   return function(file_path)
     if file_path == nil then
@@ -358,6 +359,53 @@ function M.create_test_file_extensions_matcher(intermediate_extensions, end_exte
 
     return false
   end
+end
+
+---@param dependencies table<string, string>?
+---@param packageName string
+---@return boolean
+local function _has_package_dependency(dependencies, packageName)
+  for key, _ in pairs(dependencies or {}) do
+    if key == packageName then
+      return true
+    end
+  end
+
+  return false
+end
+
+---@param path string
+---@param packageName string
+---@return boolean
+function M.has_package_dependency(path, packageName)
+  local fullPath = path .. "/package.json"
+
+  if not lib.files.exists(fullPath) then
+    return false
+  end
+
+  local ok, packageJsonContent = pcall(lib.files.read, fullPath)
+
+  if not ok then
+    print "cannot read package.json"
+    return false
+  end
+
+  local parsedPackageJson = vim.json.decode(packageJsonContent)
+
+  if not parsedPackageJson then
+    return false
+  end
+
+  if _has_package_dependency(parsedPackageJson["dependencies"], packageName) then
+    return true
+  end
+
+  if _has_package_dependency(parsedPackageJson["devDependencies"], packageName) then
+    return true
+  end
+
+  return false
 end
 
 return M
