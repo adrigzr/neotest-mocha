@@ -148,7 +148,7 @@ describe("build_spec", function()
   async.it("builds command for a test", function()
     local tree = MockTree:new {
       {
-        id = "./test/specs/basic.test.js::describe suite::should pass",
+        id = "./test/specs/basic.test.js::describe-suite::should pass",
         name = "should pass",
         path = "./test/specs/basic.test.js",
         range = { 5, 2, 8, 4 },
@@ -160,7 +160,7 @@ describe("build_spec", function()
       "--full-trace",
       "--reporter=json",
       "--reporter-options=output=tempname.json",
-      "--grep='should pass$'",
+      "--grep='^describe\\-suite should pass$'",
       "./test/specs/basic.test.js",
     }
     local expected_cwd = nil

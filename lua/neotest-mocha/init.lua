@@ -175,12 +175,11 @@ function Adapter.build_spec(args)
   local pos = tree:data()
   local testNamePattern = "'.*'"
 
-  if pos.type == "test" then
-    testNamePattern = "'" .. util.escape_test_pattern(pos.name) .. "$'"
-  end
-
-  if pos.type == "namespace" then
-    testNamePattern = "'^" .. util.escape_test_pattern(pos.name) .. "'"
+  if pos.type == "test" or pos.type == "namespace" then
+    local testName = string.sub(pos.id, string.find(pos.id, "::") + 2)
+    testName, _ = string.gsub(testName, "::", " ")
+    testNamePattern = "'^" .. util.escape_test_pattern(testName)
+    testNamePattern = testNamePattern .. (pos.type == "test" and "$'" or "'")
   end
 
   local binary = get_mocha_command(pos.path)
