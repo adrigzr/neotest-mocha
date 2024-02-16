@@ -112,14 +112,14 @@ function Adapter.discover_positions(file_path)
     ; Matches: `it('test') / specify('test')`
     ((call_expression
       function: (identifier) @func_name (#any-of? @func_name "it" "specify")
-      arguments: (arguments [(template_string) @test.name (string (string_fragment) @test.name)]  [(arrow_function) (function)])
+      arguments: (arguments [(template_string) @test.name (string (string_fragment) @test.name)]  [(arrow_function) (function_expression)])
     )) @test.definition
     ; Matches: `it.only('test') / specify.only('test')`
     ((call_expression
       function: (member_expression
         object: (identifier) @func_name (#any-of? @func_name "it" "specify")
       )
-      arguments: (arguments [(template_string) @test.name (string (string_fragment) @test.name)]  [(arrow_function) (function)])
+      arguments: (arguments [(template_string) @test.name (string (string_fragment) @test.name)]  [(arrow_function) (function_expression)])
     )) @test.definition
   ]]
 
