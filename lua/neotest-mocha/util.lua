@@ -199,6 +199,18 @@ function M.get_mocha_command(path)
   return "mocha"
 end
 
+---@param context neotest.MochaSpecContext
+---@return string[]
+function M.get_mocha_command_args(context)
+  return {
+    "--full-trace",
+    "--reporter=json",
+    "--reporter-options=output=" .. context.results_path,
+    "--grep=" .. context.test_name_pattern,
+    context.path,
+  }
+end
+
 ---@param s string
 ---@return string
 function M.escape_test_pattern(s)

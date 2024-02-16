@@ -2,13 +2,17 @@ local async = require("nio").tests
 local neotest_async = require "neotest.async"
 local basic_test_positions = require "test.fixtures.basic_test_positions"
 local MockTree = require "test.helpers.mock_tree"
-local plugin = require "neotest-mocha" {
-  mochaCommand = "mocha",
-}
 local util = require "neotest-mocha.util"
 local stub = require "luassert.stub"
 
+local function require_adapter(options)
+  package.loaded["neotest-mocha"] = nil
+
+  return require "neotest-mocha"(options)
+end
+
 describe("is_test_file", function()
+  local plugin = require_adapter { command = "mocha" }
   local supported_extensions = { "js", "mjs", "cjs", "jsx", "coffee", "ts", "tsx" }
   local find_package_json_ancestor_stub
   local has_package_dependency_stub
@@ -52,6 +56,8 @@ describe("is_test_file", function()
 end)
 
 describe("discover_positions", function()
+  local plugin = require_adapter { command = "mocha" }
+
   async.it("provides meaningful names from a basic spec", function()
     local expected_output = basic_test_positions
     local positions = plugin.discover_positions("./test/specs/basic.test.js"):to_list()
@@ -64,6 +70,7 @@ describe("build_spec", function()
   local tempname = neotest_async.fn.tempname
 
   before_each(function()
+    ---@diagnostic disable-next-line: duplicate-set-field
     neotest_async.fn.tempname = function()
       return "tempname"
     end
@@ -74,6 +81,7 @@ describe("build_spec", function()
   end)
 
   async.it("builds command for a file", function()
+    local plugin = require_adapter { command = "mocha" }
     local tree = MockTree:new {
       {
         id = "./test/specs/basic.test.js",
@@ -110,6 +118,7 @@ describe("build_spec", function()
   end)
 
   async.it("builds command for a namespace", function()
+    local plugin = require_adapter { command = "mocha" }
     local tree = MockTree:new {
       {
         id = "./test/specs/basic.test.js::describe suite",
@@ -146,6 +155,7 @@ describe("build_spec", function()
   end)
 
   async.it("builds command for a test", function()
+    local plugin = require_adapter { command = "mocha" }
     local tree = MockTree:new {
       {
         id = "./test/specs/basic.test.js::describe-suite::should pass",
@@ -180,10 +190,59 @@ describe("build_spec", function()
     assert.equal(vim.inspect(expected_strategy), vim.inspect(spec.strategy))
     assert.equal(vim.inspect(expected_env), vim.inspect(spec.env))
   end)
+
+  async.it("builds command for a test with custom mocha arguments", function()
+    local plugin = require_adapter {
+      command = "mocha",
+      command_args = function(context)
+        return {
+          "--bail",
+          "--dry-run",
+          "--reporter=spec",
+          "--grep=" .. context.test_name_pattern,
+          context.path,
+        }
+      end,
+    }
+    local tree = MockTree:new {
+      {
+        id = "./test/specs/basic.test.js::describe suite::should pass",
+        name = "should pass",
+        path = "./test/specs/basic.test.js",
+        range = { 5, 2, 8, 4 },
+        type = "test",
+      },
+    }
+    local expected_command = {
+      "mocha",
+      "--bail",
+      "--dry-run",
+      "--reporter=spec",
+      "--grep='should pass$'",
+      "./test/specs/basic.test.js",
+    }
+    local expected_cwd = nil
+    local expected_context = {
+      results_path = "tempname.json",
+      file = "./test/specs/basic.test.js",
+    }
+    local expected_strategy = nil
+    local expected_env = {}
+
+    local spec = plugin.build_spec { tree = tree }
+
+    assert.is.truthy(spec)
+    assert.equal(vim.inspect(expected_command), vim.inspect(spec.command))
+    assert.equal(vim.inspect(expected_cwd), vim.inspect(spec.cwd))
+    assert.equal(vim.inspect(expected_context), vim.inspect(spec.context))
+    assert.equal(vim.inspect(expected_strategy), vim.inspect(spec.strategy))
+    assert.equal(vim.inspect(expected_env), vim.inspect(spec.env))
+  end)
 end)
 
 describe("results", function()
   async.it("return results from test output", function()
+    local plugin = require_adapter { command = "mocha" }
     local spec = {
       context = {
         results_path = "./test/fixtures/basic_test_results.json",

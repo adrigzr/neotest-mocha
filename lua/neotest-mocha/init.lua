@@ -3,8 +3,14 @@ local lib = require "neotest.lib"
 local logger = require "neotest.logging"
 local util = require "neotest-mocha.util"
 
+---@class neotest.MochaSpecContext
+---@field results_path string
+---@field test_name_pattern string
+---@field path string
+
 ---@class neotest.MochaOptions
 ---@field command? string|fun(path:string): string
+---@field command_args? fun(context: neotest.MochaSpecContext): string[]
 ---@field env? table<string, string>|fun(): table<string, string>
 ---@field cwd? string|fun(): string
 ---@field is_test_file? fun(path:string): boolean
@@ -12,7 +18,10 @@ local util = require "neotest-mocha.util"
 ---@type fun(path:string):string
 local get_mocha_command = util.get_mocha_command
 
----@type fun():table<string, string>|nil
+---@type fun(context:neotest.MochaSpecContext):string[]
+local get_mocha_command_args = util.get_mocha_command_args
+
+---@type fun(env: string[]):table<string, string>|nil
 local get_env = util.get_env
 
 ---@type fun(path:string):string|nil
@@ -184,14 +193,13 @@ function Adapter.build_spec(args)
 
   local binary = get_mocha_command(pos.path)
   local command = vim.split(binary, "%s+")
+  local command_args = get_mocha_command_args {
+    results_path = results_path,
+    test_name_pattern = testNamePattern,
+    path = pos.path,
+  }
 
-  vim.list_extend(command, {
-    "--full-trace",
-    "--reporter=json",
-    "--reporter-options=output=" .. results_path,
-    "--grep=" .. testNamePattern,
-    pos.path,
-  })
+  vim.list_extend(command, command_args)
 
   return {
     command = command,
@@ -241,23 +249,35 @@ setmetatable(Adapter, {
     is_test_file = opts.is_test_file or is_test_file
 
     if is_callable(opts.command) then
+      ---@diagnostic disable-next-line: cast-local-type
       get_mocha_command = opts.command
     elseif opts.command then
       get_mocha_command = function()
+        ---@diagnostic disable-next-line: return-type-mismatch
         return opts.command
       end
     end
+
+    if is_callable(opts.command_args) then
+      get_mocha_command_args = opts.command_args
+    end
+
     if is_callable(opts.env) then
+      ---@diagnostic disable-next-line: cast-local-type
       get_env = opts.env
     elseif opts.env then
       get_env = function(env)
+        ---@diagnostic disable-next-line: param-type-mismatch
         return vim.tbl_extend("force", opts.env, env)
       end
     end
+
     if is_callable(opts.cwd) then
+      ---@diagnostic disable-next-line: cast-local-type
       get_cwd = opts.cwd
     elseif opts.cwd then
       get_cwd = function()
+        ---@diagnostic disable-next-line: return-type-mismatch
         return opts.cwd
       end
     end
