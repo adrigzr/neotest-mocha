@@ -10,7 +10,7 @@ local util = require "neotest-mocha.util"
 
 ---@class neotest.MochaOptions
 ---@field command? string|fun(path:string): string
----@field command_args? fun(context: neotest.MochaSpecContext): string[]
+---@field command_args? fun(context:neotest.MochaSpecContext): string[]
 ---@field env? table<string, string>|fun(): table<string, string>
 ---@field cwd? string|fun(): string
 ---@field is_test_file? fun(path:string): boolean
@@ -18,10 +18,10 @@ local util = require "neotest-mocha.util"
 ---@type fun(path:string):string
 local get_mocha_command = util.get_mocha_command
 
----@type fun(context:neotest.MochaSpecContext):string[]
+---@type fun(context:neotest.MochaSpecContext): string[]
 local get_mocha_command_args = util.get_mocha_command_args
 
----@type fun(env: string[]):table<string, string>|nil
+---@type fun(env:string[]): table<string, string>?
 local get_env = util.get_env
 
 ---@type fun(path:string):string|nil
