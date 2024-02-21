@@ -218,7 +218,7 @@ describe("build_spec", function()
       "--bail",
       "--dry-run",
       "--reporter=spec",
-      "--grep='should pass$'",
+      "--grep='^describe suite should pass$'",
       "./test/specs/basic.test.js",
     }
     local expected_cwd = nil
