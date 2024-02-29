@@ -2,7 +2,7 @@
 
 [![build](https://github.com/adrigzr/neotest-mocha/actions/workflows/workflow.yaml/badge.svg)](https://github.com/adrigzr/neotest-mocha/actions/workflows/workflow.yaml)
 
-This plugin provides a Mocha adapter for the [Neotest](https://github.com/rcarriga/neotest) framework. Requires at least version 4.0.0.
+This plugin provides a [Mocha](https://github.com/mochajs/mocha) adapter for the [Neotest](https://github.com/rcarriga/neotest) framework. Requires at least Neotest version 4.0.0 which in turn requires at least neovim version 0.9.0.
 
 **It is currently a work in progress**. It will be transferred to the official neotest organisation (once it's been created).
 
