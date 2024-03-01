@@ -199,7 +199,9 @@ function Adapter.build_spec(args)
     path = pos.path,
   }
 
-  vim.list_extend(command, command_args)
+  if vim.tbl_islist(command_args) then
+    vim.list_extend(command, command_args)
+  end
 
   return {
     command = command,
