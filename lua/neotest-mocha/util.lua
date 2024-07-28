@@ -231,8 +231,9 @@ end
 
 ---@param strategy string
 ---@param command string[]
+---@param cwd string|nil
 ---@return table|nil
-function M.get_strategy_config(strategy, command)
+function M.get_strategy_config(strategy, command, cwd)
   local config = {
     dap = function()
       return {
@@ -243,6 +244,7 @@ function M.get_strategy_config(strategy, command)
         runtimeExecutable = command[1],
         console = "integratedTerminal",
         internalConsoleOptions = "neverOpen",
+        cwd = cwd or "${workspaceFolder}",
       }
     end,
   }
