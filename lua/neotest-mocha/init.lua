@@ -203,14 +203,16 @@ function Adapter.build_spec(args)
     vim.list_extend(command, command_args)
   end
 
+  local cwd = get_cwd(pos.path)
+
   return {
     command = command,
-    cwd = get_cwd(pos.path),
+    cwd = cwd,
     context = {
       results_path = results_path,
       file = pos.path,
     },
-    strategy = util.get_strategy_config(args.strategy, command),
+    strategy = util.get_strategy_config(args.strategy, command, cwd),
     env = get_env(args[2] and args[2].env or {}),
   }
 end
