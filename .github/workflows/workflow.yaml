@@ -13,10 +13,10 @@ concurrency:
 jobs:
   stylua:
     name: stylua
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: JohnnyMorganz/stylua-action@v2
+      - uses: actions/checkout@v4
+      - uses: JohnnyMorganz/stylua-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           # CLI arguments
@@ -28,19 +28,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
+            version: nightly
             url: https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
+            version: 0.9.0
             url: https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.gz
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: date +%F > todays-date
       - name: Restore cache for today's nightly.
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: _neovim
-          key: ${{ runner.os }}-x64-${{ hashFiles('todays-date') }}
-
+          key: ${{ runner.os }}-x64-${{ hashFiles('todays-date') }}-${{ matrix.version }}
       - name: Prepare dependencies
         run: |
           test -d _neovim || {
