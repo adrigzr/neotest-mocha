@@ -238,6 +238,54 @@ describe("build_spec", function()
     assert.equal(vim.inspect(expected_strategy), vim.inspect(spec.strategy))
     assert.equal(vim.inspect(expected_env), vim.inspect(spec.env))
   end)
+
+  async.it("builds command for a test with custom mocha arguments using test_name and fgrep", function()
+    local plugin = require_adapter {
+      command = "mocha",
+      command_args = function(context)
+        return {
+          "--bail",
+          "--dry-run",
+          "--reporter=spec",
+          "--fgrep=" .. context.test_name,
+          context.path,
+        }
+      end,
+    }
+    local tree = MockTree:new {
+      {
+        id = "./test/specs/basic.test.js::describe suite::should pass",
+        name = "should pass",
+        path = "./test/specs/basic.test.js",
+        range = { 5, 2, 8, 4 },
+        type = "test",
+      },
+    }
+    local expected_command = {
+      "mocha",
+      "--bail",
+      "--dry-run",
+      "--reporter=spec",
+      "--fgrep='describe suite should pass'",
+      "./test/specs/basic.test.js",
+    }
+    local expected_cwd = nil
+    local expected_context = {
+      results_path = "tempname.json",
+      file = "./test/specs/basic.test.js",
+    }
+    local expected_strategy = nil
+    local expected_env = {}
+
+    local spec = plugin.build_spec { tree = tree }
+
+    assert.is.truthy(spec)
+    assert.equal(vim.inspect(expected_command), vim.inspect(spec.command))
+    assert.equal(vim.inspect(expected_cwd), vim.inspect(spec.cwd))
+    assert.equal(vim.inspect(expected_context), vim.inspect(spec.context))
+    assert.equal(vim.inspect(expected_strategy), vim.inspect(spec.strategy))
+    assert.equal(vim.inspect(expected_env), vim.inspect(spec.env))
+  end)
 end)
 
 describe("results", function()

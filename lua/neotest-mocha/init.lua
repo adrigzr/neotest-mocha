@@ -5,6 +5,7 @@ local util = require "neotest-mocha.util"
 
 ---@class neotest.MochaSpecContext
 ---@field results_path string
+---@field test_name string
 ---@field test_name_pattern string
 ---@field path string
 
@@ -192,10 +193,11 @@ function Adapter.build_spec(args)
   end
 
   local pos = tree:data()
-  local testNamePattern = ".*"
+  local testNamePattern = "'.*'"
+  local testName = ""
 
   if pos.type == "test" or pos.type == "namespace" then
-    local testName = string.sub(pos.id, string.find(pos.id, "::") + 2)
+    testName = string.sub(pos.id, string.find(pos.id, "::") + 2)
     testName, _ = string.gsub(testName, "::", " ")
     testNamePattern = "^" .. util.escape_test_pattern(testName)
     testNamePattern = testNamePattern .. (pos.type == "test" and "$" or "")
@@ -205,6 +207,7 @@ function Adapter.build_spec(args)
   local command = vim.split(binary, "%s+")
   local command_args = get_mocha_command_args {
     results_path = results_path,
+    test_name = testName,
     test_name_pattern = testNamePattern,
     path = pos.path,
   }

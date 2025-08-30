@@ -31,6 +31,7 @@ use({
           command_args = function(context)
             -- The context contains:
             --   results_path: The file that json results are written to
+            --   test_name: The exact name of the test; is empty for `file` and `dir` position tests.
             --   test_name_pattern: The generated pattern for the test
             --   path: The path to the test file
             --
