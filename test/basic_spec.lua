@@ -288,6 +288,20 @@ describe("build_spec", function()
   end)
 end)
 
+describe("has_package_dependency", function()
+  async.it("returns true when package is in devDependencies", function()
+    assert.True(util.has_package_dependency(".", "mocha"))
+  end)
+
+  async.it("returns false when package is not in dependencies", function()
+    assert.False(util.has_package_dependency(".", "jest"))
+  end)
+
+  async.it("returns false when package.json does not exist", function()
+    assert.False(util.has_package_dependency("/nonexistent/path", "mocha"))
+  end)
+end)
+
 describe("results", function()
   async.it("return results from test output", function()
     local plugin = require_adapter { command = "mocha" }
