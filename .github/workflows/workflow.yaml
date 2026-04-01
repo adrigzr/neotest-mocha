@@ -52,6 +52,18 @@ jobs:
         with:
           path: _neovim
           key: ${{ runner.os }}-x64-${{ hashFiles('todays-date') }}-${{ matrix.version }}
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install npm packages
+        run: |
+          npm install -g tree-sitter-cli@latest
+          cd ./spec
+          npm ci
+          cd ..
+      - name: Verify tree-sitter-cli installation
+        run: tree-sitter --version
       - name: Prepare dependencies
         run: |
           test -d _neovim || {
