@@ -39,6 +39,9 @@ jobs:
             version: 0.11.0
             url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz
           - os: ubuntu-latest
+            version: 0.12.0
+            url: https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-x86_64.tar.gz
+          - os: ubuntu-latest
             version: nightly
             url: https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz
     steps:
