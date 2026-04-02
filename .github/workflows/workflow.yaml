@@ -39,6 +39,9 @@ jobs:
             version: 0.11.0
             url: https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz
           - os: ubuntu-latest
+            version: 0.12.0
+            url: https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-x86_64.tar.gz
+          - os: ubuntu-latest
             version: nightly
             url: https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz
     steps:
@@ -49,6 +52,14 @@ jobs:
         with:
           path: _neovim
           key: ${{ runner.os }}-x64-${{ hashFiles('todays-date') }}-${{ matrix.version }}
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install tree-sitter-cli
+        run: |
+          npm install -g tree-sitter-cli@latest
+          tree-sitter --version
       - name: Prepare dependencies
         run: |
           test -d _neovim || {
@@ -58,12 +69,17 @@ jobs:
           mkdir -p ~/.local/share/nvim/site/pack/vendor/start
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
           git clone --depth 1 https://github.com/nvim-neotest/neotest.git ~/.local/share/nvim/site/pack/vendor/start/neotest
-          git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git ~/.local/share/nvim/site/pack/vendor/start/nvim-treesitter
           git clone --depth 1 https://github.com/nvim-neotest/nvim-nio ~/.local/share/nvim/site/pack/vendor/start/nvim-nio
           ln -s $(pwd) ~/.local/share/nvim/site/pack/vendor/start
           export PATH="${PWD}/_neovim/bin:${PATH}"
           export VIM="${PWD}/_neovim/share/nvim/runtime"
-          nvim --headless -c 'TSInstallSync javascript typescript | quit'
+          if [[ ${{ matrix.version }} == '0.12.0' ]]; then
+            git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git ~/.local/share/nvim/site/pack/vendor/start/nvim-treesitter
+            nvim --headless -c 'lua require("nvim-treesitter").install({ "javascript", "typescript" }, { summary = true }):wait(5 * 60 * 1000); vim.cmd("TSLog"); vim.cmd.quitall()'
+          else
+            git clone --depth 1 --branch master https://github.com/nvim-treesitter/nvim-treesitter.git ~/.local/share/nvim/site/pack/vendor/start/nvim-treesitter
+            nvim --headless -c 'TSInstallSync javascript typescript | quit'
+          fi
       - name: Run tests
         run: |
           export PATH="${PWD}/_neovim/bin:${PATH}"
