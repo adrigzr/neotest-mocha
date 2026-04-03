@@ -64,7 +64,7 @@ M.path = (function()
   end
 
   local function path_join(...)
-    return table.concat(vim.tbl_flatten { ... }, "/")
+    return table.concat({ ... }, "/")
   end
 
   -- Traverse the path calling cb along the way.
@@ -136,7 +136,7 @@ M.path = (function()
 end)()
 
 function M.search_ancestors(startpath, func)
-  validate { func = { func, "f" } }
+  validate { func = { func, "function" } }
   if func(startpath) then
     return startpath
   end
@@ -155,7 +155,7 @@ function M.search_ancestors(startpath, func)
 end
 
 function M.root_pattern(...)
-  local patterns = vim.tbl_flatten { ... }
+  local patterns = { ... }
   local function matcher(path)
     for _, pattern in ipairs(patterns) do
       for _, p in ipairs(vim.fn.glob(M.path.join(path, pattern), true, true)) do
